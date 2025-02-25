@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adc1a85d0a0e9d343b8f5eefe87e4c7f, type: 3}
+  m_Name: EnumObjectContainer_WIND_DIRECTIONS
+  m_EditorClassIdentifier: 
+  enumList:
+  - {fileID: 11400000, guid: e035ddc430082b44b98a88cde5fae370, type: 2}
+  - {fileID: 11400000, guid: 3d58bc69ee4feb74bb1a7dc3bee94e94, type: 2}
