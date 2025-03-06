@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using System.Linq;
 using static InputSystem_Actions;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -82,9 +83,9 @@ public class GameManager : MonoBehaviour
     public void UnSubscribeClickable(IClickable clickable)
     {
         clickableList.Remove(clickable);
+        Vector3 vec = new Vector3();
+        vec.Set(z: 3, x: 3).Set(y: 3);
     }
-
-    
 }
 
 
@@ -149,5 +150,19 @@ public class InputHandler : MonoBehaviour, IPlayerActions
     {
         inputActions = new InputSystem_Actions();
         inputActions.Enable();
+    }
+}
+
+public abstract class CustomMonobehaviour : MonoBehaviour, IUpdateable
+{
+    public abstract void OnUpdate();
+}
+
+public static class VectorExtensions
+{
+    public static Vector3 Set(this Vector3 vec, float? x = null, float? y = null, float? z = null)
+    {
+        vec = new Vector3(x ?? vec.x, y ?? vec.y, z ?? vec.z);
+        return vec;
     }
 }

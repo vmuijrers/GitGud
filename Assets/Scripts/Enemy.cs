@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-public class Enemy : BaseActor, IClickable, IScoreable, IDeathable
+public class Enemy : BaseActor, IClickable, IScoreable //, IDeathable
 {
     [SerializeField] private Transform target;
 
     public event System.Action OnAddScore;
-    public event System.Action OnDeath;
+    public event System.Action<Enemy> OnDeath;
 
     public override void OnSetup()
     {
@@ -23,7 +23,7 @@ public class Enemy : BaseActor, IClickable, IScoreable, IDeathable
         if (Health <= 0)
         {
             Debug.Log("Enemy Died!");
-            OnDeath?.Invoke();
+            OnDeath?.Invoke(this);
             OnAddScore?.Invoke();
             Respawn();
         }
