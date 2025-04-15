@@ -4,6 +4,11 @@
     {
         public event System.Action JumpEvent;
 
+        void Start ()
+        {
+            
+        }
+
         public void Jump()
         {
             //Do your jump here

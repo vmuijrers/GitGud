@@ -11,6 +11,8 @@ public abstract class BaseActor : MonoBehaviour, IDamageable, IUpdateable, ISetu
 
     [SerializeField] protected int baseHealth = 5;
 
+    public FloatVariable AttackSpeed;
+
     public abstract void Respawn();
     public abstract void OnTakeDamage();
     public abstract void Move();
