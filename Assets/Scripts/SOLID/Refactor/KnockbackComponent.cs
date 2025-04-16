@@ -4,12 +4,6 @@ namespace RefactoredBomb
     public class KnockbackComponent : MonoBehaviour
     {
         [SerializeField] private float force = 1000;
-        private Rigidbody rb;
-
-        private void Awake()
-        {
-            rb = GetComponent<Rigidbody>();
-        }
 
         public void AddForce(Rigidbody rb, Vector3 direction, float force)
         {

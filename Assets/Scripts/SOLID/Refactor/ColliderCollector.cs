@@ -5,11 +5,14 @@ namespace RefactoredBomb
 {
     public class ColliderCollector : MonoBehaviour
     {
-        public LayerMask layer;
-        public float radius;
+        [SerializeField] private LayerMask layer;
+        [SerializeField] private float radius;
 
         public UnityEvent<GameObject, GameObject> colliderEvent; //sender, target
 
+        /// <summary>
+        /// Is Called via Inspector
+        /// </summary>
         public void RaiseEventForCollidersInRange()
         {
             var cols = Physics.OverlapSphere(transform.position, radius, layer);

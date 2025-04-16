@@ -2,12 +2,12 @@
 {
     public class Timer
     {
-        private float initialTimer;
-        private float timeLeft;
-        private event System.Action OnTimerDone;
+        private float initialTimer = 10;
+        private float timeLeft = 0;
+        private event System.Action OnTimerDone = null;
         private bool isActive = false;
 
-        public Timer(float initialTimer, bool startImmediately = true,  System.Action OnTimerDone = null)
+        public Timer(float initialTimer, bool startImmediately = true, System.Action OnTimerDone = null)
         {
             this.initialTimer = initialTimer;
             this.OnTimerDone = OnTimerDone;

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 /// <summary>
 /// This is a Composite Bomb, all functionality is in one class, very inflexible
@@ -20,7 +21,7 @@ public class Bomb : MonoBehaviour
         timeLeft = initialTimer;
     }
 
-    void Update()
+    private void Update()
     {
         if(timeLeft > 0)
         {
@@ -45,6 +46,8 @@ public class Bomb : MonoBehaviour
             {
                 health.TakeDamage(damage);
             }
+
+            //sound?
         }
             
         Destroy(gameObject);
@@ -56,23 +59,29 @@ public class BombSOLID : MonoBehaviour
 {
     [SerializeField] private float radius = 5;
     [SerializeField] private List<MonoBehaviour> effects = new List<MonoBehaviour>();
-    private List<IExplosionEffect> explosionEffects = new List<IExplosionEffect>();
+
+    private RefactoredBomb.Timer bombTimer;
 
     private void Start()
     {
-        explosionEffects = effects.OfType<IExplosionEffect>().ToList();    
+        bombTimer = new RefactoredBomb.Timer(3, true, Explode);
+    }
+
+    private void Update()
+    {
+        bombTimer.Tick(Time.deltaTime);
     }
 
     private void Explode()
     {
-        foreach(var effect in explosionEffects)
+        foreach(var effect in effects.OfType<IExplosionEffect>())
         {
             effect.ApplyEffect(transform.position, radius);
         }
     }
 }
 
-public class DamageEffect : MonoBehaviour, IExplosionEffect
+public class AreaDamageEffect : MonoBehaviour, IExplosionEffect
 {
     [SerializeField] private float damage = 100;
     [SerializeField] private LayerMask hitLayer;
@@ -102,86 +111,83 @@ public class BombExtended
     public float Damage { get; set; }
     public float Radius { get; set; }
     public LayerMask HitLayer { get; set; }
-    public RefactoredBomb.Timer timer { get; set; }
+    public RefactoredBomb.Timer Timer { get; set; }
     public event System.Action ExplosionEffect = null;
     public Vector3 Position { get; set; }
     public Quaternion Rotation { get; set; }
 
     private void Setup()
     {
-
+        BombExtended bomb = new BombExtended()
+        {
+            Damage = 100,
+            Radius = 10
+        };
     }
 
     public void Tick(float deltaTime)
     {
-        timer.Tick(deltaTime);
+        Timer.Tick(deltaTime);
     }
 
     public class BombBuilder
     {
-        private float damage = 100;
-        private float radius = 5;
-        private LayerMask hitLayer;
-        private System.Action explosionEffect = null;
-        private RefactoredBomb.Timer timer = null;
-        private Vector3 position;
-        private Quaternion rotation;
+        //private float damage = 100;
+        //private float radius = 5;
+        //private LayerMask hitLayer;
+        //private System.Action explosionEffect = null;
+        //private RefactoredBomb.Timer timer = null;
+        //private Vector3 position;
+        //private Quaternion rotation;
+
+        private BombExtended bomb = new BombExtended();
 
         public BombBuilder SetPosition(Vector3 position)
         {
-            this.position = position;
+            bomb.Position = position;
             return this;
         }
 
         public BombBuilder SetRotation(Quaternion rotation)
         {
-            this.rotation = rotation;
+            bomb.Rotation = rotation;
             return this;
         }
 
         public BombBuilder SetDamage(float damage)
         {
-            this.damage = damage;
+            bomb.Damage = damage;
             return this;
         }
 
         public BombBuilder SetRadius(float radius)
         {
-            this.radius = radius;
+            bomb.Radius = radius;
             return this;
         }
 
         public BombBuilder SetHitLayer(LayerMask layerMask)
         {
-            this.hitLayer = layerMask;
+            bomb.HitLayer = layerMask;
             return this;
         }
 
         public BombBuilder SetTimer(float duration)
         {
-            this.timer = new RefactoredBomb.Timer(duration);
+            bomb.Timer = new RefactoredBomb.Timer(duration);
             return this;
         }
 
         public BombBuilder AddReactionToExplosion(System.Action effect)
         {
-            this.explosionEffect += effect;
+            bomb.ExplosionEffect += effect;
             return this;
         }
 
         public BombExtended Build()
         {
-            BombExtended newBomb = new BombExtended();
-            newBomb.Damage = damage;
-            newBomb.Radius = radius;
-            newBomb.HitLayer = hitLayer;
-            newBomb.ExplosionEffect = explosionEffect;
-            timer.SetEffectsOnDone(explosionEffect);
-            newBomb.timer = timer;
-            newBomb.Position = position;
-            newBomb.Rotation = rotation;
-            explosionEffect = null;
-            return newBomb;
+            bomb.Setup();
+            return bomb;
         }
     }
 

@@ -111,11 +111,10 @@ public class FavoritesWindow : EditorWindow
                 foreach (Object draggedObject in DragAndDrop.objectReferences)
                 {
                     string path = AssetDatabase.GetAssetPath(draggedObject);
-                    
+
                     if (AssetDatabase.IsValidFolder(path))
                     {
                         string[] assetGUIDs = AssetDatabase.FindAssets("", new[] { path });
-                        //ShowFolderContents(draggedObject.GetInstanceID());
 
                         foreach (string guid in assetGUIDs)
                         {
