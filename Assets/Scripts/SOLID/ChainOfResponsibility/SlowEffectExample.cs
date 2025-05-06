@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlowEffectExampleBad
+public class SlowEffectExample
 {
     public float BaseMoveSpeed { get; set; }
     public float MoveSpeedModifier { get; private set; }
     public float MoveSpeed => BaseMoveSpeed * MoveSpeedModifier;
 
-    private List<IEffect> activeEffects = new List<IEffect>();
+    private List<BaseSlowEffect> activeEffects = new List<BaseSlowEffect>();
 
-    public SlowEffectExampleBad(float baseMoveSpeed) 
+    public SlowEffectExample(float baseMoveSpeed) 
     { 
         BaseMoveSpeed = baseMoveSpeed;
         MoveSpeedModifier = 1f;
@@ -49,7 +49,7 @@ public class SlowEffectExampleBad
         MoveSpeedModifier = value;
     }
 
-    public void AddEffectToList(IEffect effect)
+    public void AddEffectToList(BaseSlowEffect effect)
     {
         if (!activeEffects.Contains(effect))
         {
@@ -57,6 +57,16 @@ public class SlowEffectExampleBad
         }
         UpdateModifier();
     }
+
+    public void RemoveEffectFromList(BaseSlowEffect effect)
+    {
+        if (activeEffects.Contains(effect))
+        {
+            activeEffects.Remove(effect);
+        }
+        UpdateModifier();
+    }
+
 
     private void UpdateModifier()
     {
@@ -68,14 +78,19 @@ public class SlowEffectExampleBad
         MoveSpeedModifier = baseModifier;
     }
 
-    public void RemoveEffectFromList(IEffect effect)
+    public float HandleEffects(ref float speedValue)
     {
-        if (activeEffects.Contains(effect))
+        for(int i = 0; i < activeEffects.Count - 1; i++)
         {
-            activeEffects.Remove(effect);
+            activeEffects[i].NextEffect = activeEffects[i + 1];
         }
-        UpdateModifier();
+        if(activeEffects.Count > 0)
+        {
+            activeEffects[0]?.Handle(ref speedValue);
+        }
+        return speedValue;
     }
+
 }
 
 public interface IEffect
@@ -84,7 +99,7 @@ public interface IEffect
     void Reverse(ref float baseValue);
 }
 
-public class AdditiveSlowEffect : IEffect
+public class AdditiveSlowEffect : BaseSlowEffect
 {
     public float Value { get; private set; }
 
@@ -93,32 +108,59 @@ public class AdditiveSlowEffect : IEffect
         this.Value = value;
     }
 
-    public void Apply(ref float speedValue)
+    public override void Apply(ref float speedValue)
     {
         speedValue += Value;
     }
 
-    public void Reverse(ref float speedValue)
+    public override void Reverse(ref float speedValue)
     {
         speedValue -= Value;
     }
 }
 
-public class MultiplativeSlowEffect : IEffect
+
+public interface IHandler
+{
+    IEffect NextEffect { get; set; }
+    void Handle(ref float inputValue);
+}
+
+public abstract class BaseSlowEffect : IEffect, IHandler
+{
+    public IEffect NextEffect { get; set; }
+
+    public void SetNext(IEffect effect)
+    {
+        NextEffect = effect;
+    }
+
+    public void Handle(ref float inputValue)
+    {
+        Apply(ref inputValue);
+        NextEffect?.Apply(ref inputValue);
+    }
+
+    public abstract void Apply(ref float speedValue);
+    public abstract void Reverse(ref float speedValue);
+}
+
+public class MultiplativeSlowEffect : BaseSlowEffect
 {
     public float Value { get; private set; }
+
 
     public MultiplativeSlowEffect(float value)
     {
         this.Value = value;
     }
 
-    public void Apply(ref float speedValue)
+    public override void Apply(ref float speedValue)
     {
         speedValue *= Value;
     }
 
-    public void Reverse(ref float speedValue)
+    public override void Reverse(ref float speedValue)
     {
         speedValue /= Value;
     }
@@ -130,7 +172,7 @@ public class SlowBubbleExample1 : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent<SlowEffectExampleBad>(out SlowEffectExampleBad unit))
+        if(other.TryGetComponent<SlowEffectExample>(out SlowEffectExample unit))
         {
             unit.MultiplySpeedModifier(value);
         }
@@ -138,7 +180,7 @@ public class SlowBubbleExample1 : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent<SlowEffectExampleBad>(out SlowEffectExampleBad unit))
+        if (other.TryGetComponent<SlowEffectExample>(out SlowEffectExample unit))
         {
             unit.DivideSpeedModifier(value);
         }
@@ -156,7 +198,7 @@ public class SlowBubbleExample2 : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<SlowEffectExampleBad>(out SlowEffectExampleBad unit))
+        if (other.TryGetComponent<SlowEffectExample>(out SlowEffectExample unit))
         {
             unit.ApplyEffect(slowEffect);
         }
@@ -164,7 +206,7 @@ public class SlowBubbleExample2 : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent<SlowEffectExampleBad>(out SlowEffectExampleBad unit))
+        if (other.TryGetComponent<SlowEffectExample>(out SlowEffectExample unit))
         {
             unit.RemoveEffect(slowEffect);
         }
@@ -173,16 +215,16 @@ public class SlowBubbleExample2 : MonoBehaviour
 
 public class SlowBubbleExample3 : MonoBehaviour
 {
-    private IEffect slowEffect;
+    private BaseSlowEffect slowEffect;
 
-    public SlowBubbleExample3(IEffect slowEffect)
+    public SlowBubbleExample3(BaseSlowEffect slowEffect)
     {
         this.slowEffect = slowEffect;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<SlowEffectExampleBad>(out SlowEffectExampleBad unit))
+        if (other.TryGetComponent<SlowEffectExample>(out SlowEffectExample unit))
         {
             unit.AddEffectToList(slowEffect);
         }
@@ -190,7 +232,7 @@ public class SlowBubbleExample3 : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent<SlowEffectExampleBad>(out SlowEffectExampleBad unit))
+        if (other.TryGetComponent<SlowEffectExample>(out SlowEffectExample unit))
         {
             unit.RemoveEffectFromList(slowEffect);
         }

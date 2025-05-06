@@ -29,6 +29,16 @@ public class Enemy : BaseActor, IClickable, IScoreable //, IDeathable
         }
     }
 
+    public Enemy Clone()
+    {
+        return this.MemberwiseClone() as Enemy;
+    }
+
+    public void SetPosition(Vector3 pos)
+    {
+        transform.position = pos;
+    }
+
     public override void Move()
     {
         transform.position += (target.position - transform.position).normalized * Speed * Time.deltaTime;
