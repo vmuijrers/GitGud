@@ -82,7 +82,7 @@ public class SlowEffectExample
     {
         for(int i = 0; i < activeEffects.Count - 1; i++)
         {
-            activeEffects[i].NextEffect = activeEffects[i + 1];
+            activeEffects[i].NextHandler = activeEffects[i + 1];
         }
         if(activeEffects.Count > 0)
         {
@@ -122,23 +122,23 @@ public class AdditiveSlowEffect : BaseSlowEffect
 
 public interface IHandler
 {
-    IEffect NextEffect { get; set; }
+    IHandler NextHandler { get; set; }
     void Handle(ref float inputValue);
 }
 
 public abstract class BaseSlowEffect : IEffect, IHandler
 {
-    public IEffect NextEffect { get; set; }
+    public IHandler NextHandler { get; set; }
 
-    public void SetNext(IEffect effect)
+    public void SetNext(IHandler handler)
     {
-        NextEffect = effect;
+        NextHandler = handler;
     }
 
     public void Handle(ref float inputValue)
     {
         Apply(ref inputValue);
-        NextEffect?.Apply(ref inputValue);
+        NextHandler?.Handle(ref inputValue);
     }
 
     public abstract void Apply(ref float speedValue);

@@ -151,6 +151,7 @@ namespace CustomEventManager
     public enum EventTypeCustom
     {
         EVENT_ON_GAME_STARTED = 0, //0
+        ON_PLAYER_KILLED = 1
     }
     public static class EventManager
     {

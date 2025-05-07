@@ -78,7 +78,7 @@ namespace Factory
             var goblinSpawner = new Spawner<Enemy>(new GoblinFactory());
             goblinSpawner.SpawnAtPosition(transform.position); //Spawn a goblin
 
-            var orcSpawner = new Spawner<Enemy>(new GoblinFactory());
+            var orcSpawner = new Spawner<Enemy>(new OrcFactory());
             orcSpawner.SpawnAtPosition(transform.position); //Spawn an orc
         }
     }
