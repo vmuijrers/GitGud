@@ -4,12 +4,16 @@ using UnityEngine.InputSystem;
 using System.Linq.Expressions;
 using UnityEditor;
 using Unity.VisualScripting;
+using System;
 
 public class DummyFSMEnemy : MonoBehaviour
 {
     public float Health = 100;
     public float Speed = 100;
     private FSM fsm;
+    public InputAction action;
+
+    
 
     void Start()
     {
