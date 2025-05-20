@@ -42,26 +42,8 @@ public class SheetReader : MonoBehaviour
     {
         ISheet<UnitSheet.Row> result = SheetContainer.Find<ISheet<UnitSheet.Row>>("Units");
         UnitSheet = result[ID];
-        //result[ColumnID];
-        //ISheet sheet = SheetContainer.Find("Units");
-        //if (sheet.Contains("MELEE"))
-        //{
-        //    var result = sheet.Keys[0];
-        //}
-        ////foreach(var r in sheet)
-        ////{
-        ////}
-        ////if (row.Contains(ID))
-        ////{
-        ////    var propertyMap = row.GetPropertyMap(new SheetConvertingContext()
-        ////    {
-        ////        Container = SheetContainer,
-        ////    });
-        ////    propertyMap.
-        ////}
-        return UnitSheet.HP;// [ColumnID];
+        return UnitSheet.GetByString(ColumnID);
     }
-
 
     private void Update()
     {
@@ -215,6 +197,18 @@ public class UnitSheet : Sheet<UnitSheet.Row>
         public int HP { get; private set; }
         public int MoveSpeed { get; private set; }
         public int AttackRange { get; private set; }
+
+        public object GetByString(string columName)
+        {
+            switch(columName)
+            {
+                case "Name": return Name;
+                case "HP": return HP;
+                case "MoveSpeed": return MoveSpeed;
+                case "AttackRange": return AttackRange;
+            }
+            return null;
+        }
     }
 }
 
