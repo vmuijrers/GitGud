@@ -34,7 +34,10 @@ namespace ClickerExample
         {
             if (Input.GetMouseButtonDown(0))
             {
-                var items = Registry<IClickable>.Filter((x) => Vector3.Distance(Input.mousePosition, x.transform.position) < 1);
+                Debug.Log("Click");
+                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.y));
+                worldPosition.y = 0;
+                var items = Registry<IClickable>.Filter((x) => Vector3.Distance(worldPosition, x.transform.position) < 1);
                 foreach(var item in items)
                 {
                     item?.OnClick();

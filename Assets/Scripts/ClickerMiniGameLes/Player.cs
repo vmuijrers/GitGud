@@ -8,6 +8,12 @@ namespace ClickerExample
         {
             Debug.Log("Setup Player!");
             var enemiesWithLowHealth = Registry<Enemy>.Filter((x) => x.Health < 5);
+            Registry<IClickable>.Register(this);
+        }
+
+        private void OnDestroy()
+        {
+            Registry<IClickable>.UnRegister(this);
         }
 
         public override void Move()
@@ -16,6 +22,7 @@ namespace ClickerExample
 
         public override void OnClick()
         {
+            Debug.Log("Player was Clicked");
         }
         
     }
