@@ -8,6 +8,8 @@ using System.Threading;
 /// </summary>
 public class Bomb : MonoBehaviour
 {
+    public float SomeFLOAT { get; set; }
+
     [SerializeField] private LayerMask hitLayer;
     [SerializeField] private float knockbackForce = 300; 
     [SerializeField] private int damage = 100;
@@ -35,6 +37,7 @@ public class Bomb : MonoBehaviour
     
     public void Explode()
     {
+        Debug.Log("Boom!");
         var cols = Physics.OverlapSphere(transform.position, hitRadius, hitLayer);
         foreach(Collider c in cols)
         {
@@ -49,8 +52,8 @@ public class Bomb : MonoBehaviour
 
             //sound?
         }
-            
-        Destroy(gameObject);
+
+        //Destroy(gameObject);
     }
 }
 

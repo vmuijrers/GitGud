@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 061342b9169b5c348bc3752763b9d026, type: 3}
+  m_Name: Fire Ability
+  m_EditorClassIdentifier: 
+  effects:
+    rid: 1216626728054554678
+  references:
+    version: 2
+    RefIds:
+    - rid: 1216626728054554678
+      type: {class: 'ReorderableList`1[[AbilityEffect, Assembly-CSharp]]', ns: , asm: Assembly-CSharp}
+      data:
+        list:
+        - rid: 1216626728054554679
+    - rid: 1216626728054554679
+      type: {class: DamageEffect, ns: , asm: Assembly-CSharp}
+      data:
+        damage: 0

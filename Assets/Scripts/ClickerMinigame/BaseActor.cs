@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -11,14 +12,36 @@ public abstract class BaseActor : MonoBehaviour, IDamageable, IUpdateable, ISetu
 
     [SerializeField] protected int baseHealth = 5;
 
-    public FloatVariable AttackSpeed;
-
     public abstract void Respawn();
-    public abstract void OnTakeDamage();
+    public abstract void OnTakeDamage(int damage);
     public abstract void Move();
 
     public virtual void OnSetup() { }
     public virtual void OnUpdate() { }
+
+    protected IEnumerator BumpRoutine(float minSize, float maxSize, float sizeMultiplier, float duration)
+    {
+        float t = 0;
+        transform.localScale = new Vector3(minSize, minSize, minSize);
+        while (t < 1)
+        {
+            t += Time.deltaTime * 1 / duration * 2f;
+            yield return null;
+            float newScale = Mathf.Lerp(minSize, maxSize, t);
+            transform.localScale = new Vector3(newScale, newScale, newScale);
+        }
+        t = 0;
+        minSize *= sizeMultiplier;
+        while (t < 1)
+        {
+            t += Time.deltaTime * 1 / duration * 2f;
+            yield return null;
+            float newScale = Mathf.Lerp(maxSize, minSize, t);
+            transform.localScale = new Vector3(newScale, newScale, newScale);
+        }
+        transform.localScale = new Vector3(minSize, minSize, minSize);
+    }
+
 }
 
 //public class SomeClass1

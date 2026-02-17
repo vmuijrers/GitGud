@@ -32,8 +32,13 @@ public interface IUpdateable
     void OnUpdate() { }
 }
 
-public interface IDamageable
+public interface IDamageable : ITransform
 {
     int Health { get; }
-    void OnTakeDamage();
+    void OnTakeDamage(int damage);
+}
+
+internal interface ITargetUser
+{
+    void SetTarget(IDamageable target);
 }
