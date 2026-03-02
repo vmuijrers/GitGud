@@ -53,7 +53,7 @@ public class Bomb : MonoBehaviour
             //sound?
         }
 
-        //Destroy(gameObject);
+        Destroy(gameObject);
     }
 }
 
