@@ -20,7 +20,7 @@ public interface IDeathable
     event System.Action OnDeath;
 }
 
-public interface IPlayer : IDeathable, ITransform { }
+public interface IPlayer : IDeathable, ITransform, IDamageable { }
 
 public interface ISetupable
 {

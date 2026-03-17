@@ -63,7 +63,7 @@ Shader "Unlit/FogOfWarArray"
             fixed4 frag(v2f i) : SV_Target
             {
                 // sample the texture
-                fixed4 col = _Color;// tex2D(_MainTex, i.uv);
+                fixed4 col = tex2D(_MainTex, i.uv);// ;
                 col.a = 1;
                 for (int j = 0; j < _FogOfWarBreakersArraySize; j++)
                 {
@@ -78,7 +78,6 @@ Shader "Unlit/FogOfWarArray"
                         {
                             col.a = min(col.a, 0);
                         }
-                        
                     }
                 }
 

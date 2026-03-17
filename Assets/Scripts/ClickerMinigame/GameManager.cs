@@ -6,7 +6,7 @@ using System;
 
 public class GameManager : MonoBehaviour
 {
-    private List<IClickable> clickableList = new List<IClickable>();
+    private IEnumerable<IClickable> clickableList = new List<IClickable>();
     private List<IUpdateable> updateableList = new List<IUpdateable>();
     [SerializeField] private ScoreBoard scoreBoard;
     [SerializeField] private UIManager uiManager;
@@ -18,11 +18,18 @@ public class GameManager : MonoBehaviour
 
         DoFunction((x) => x.OnSetup(), actors.OfType<ISetupable>());
 
-        DoFunction((x) => SubscribeClickable(x), Registry<IClickable>.Items);
+        //DoFunction((x) => SubscribeClickable(x), Registry<IClickable>.Items);
+        clickableList = Registry<IClickable>.Items;
         DoFunction((x) => x.SetTarget(player), Registry<ITargetUser>.Items);
         DoFunction((x) => updateableList.Add(x), Registry<IUpdateable>.Items);
         DoFunction((x) => x.OnAddScore += scoreBoard.AddPoint, Registry<IScoreable>.Items);
         DoFunction((x) => x.OnDeath += ResetGame, Registry<IPlayer>.Items);
+
+        //var allPlayers = Registry<IPlayer>.Items;
+        //foreach (var player in allPlayers)
+        //{
+        //    player.OnDeath += ResetGame;
+        //}
 
         scoreBoard.OnScoreChanged += uiManager.OnUpdateScoreUI;
         scoreBoard.ResetScore();
@@ -68,15 +75,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SubscribeClickable(IClickable clickable)
-    {
-        clickableList.Add(clickable);
-    }
+    //public void SubscribeClickable(IClickable clickable)
+    //{
+    //    clickableList.Add(clickable);
+    //}
 
-    public void UnSubscribeClickable(IClickable clickable)
-    {
-        clickableList.Remove(clickable);
-    }
+    //public void UnSubscribeClickable(IClickable clickable)
+    //{
+    //    clickableList.Remove(clickable);
+    //}
 }
 
 public static class VectorExtensions

@@ -28,15 +28,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Texture: {fileID: 10309, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 10, y: 10}
+        m_Offset: {x: 0.95320433, y: 0.7964491}
     m_Ints: []
     m_Floats:
-    - _FadeOutDistance: 2
+    - _FadeOutDistance: 1
     - _FogOfWarBreakersArraySize: 16
     - _Height: 5
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

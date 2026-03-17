@@ -32,5 +32,6 @@ public class FogOfWar : MonoBehaviour
             }
         }
         material.SetVectorArray("_FogOfWarBreakers", positions);
+        material.SetTextureOffset("_MainTex", new Vector2(Mathf.Sin(Time.time), Mathf.Cos(Time.time * 3)));
     }
 }
